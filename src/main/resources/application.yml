@@ -1,0 +1,13 @@
+spring:
+  thymeleaf:
+    mode: html5
+    cache: false
+    encoding: UTF-8
+server:
+  port: 8080
+
+# 用于在服务器端可以用host:port/shutdown关闭springboot
+endpoint:
+  shutdown:
+    enabled: true
+    sensitive: false
