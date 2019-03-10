@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.4.6//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.ratil.animecrawler.mapper.GalleryMapper">
+
+	<resultMap id="galleryList" type="top.ratil.animecrawler.entity.Gallery">
+		<constructor>
+			<idArg column="id" jdbcType="INTEGER" javaType="Integer"/>
+			<arg column="pic_num" jdbcType="INTEGER" javaType="Integer"/>
+			<arg column="gallery_date" jdbcType="DATE" javaType="java.time.LocalDate"/>
+			<arg column="gallery_url" jdbcType="VARCHAR" javaType="String"/>
+		</constructor>
+		<collection property="pictureList" ofType="top.ratil.animecrawler.entity.Picture">
+			<id column="pic_id" property="picId" jdbcType="INTEGER" javaType="Integer"/>
+			<result column="pic_url" property="picUrl" jdbcType="VARCHAR" javaType="String"/>
+			<result column="pic_date" property="picDate" jdbcType="DATE" javaType="java.time.LocalDate"/>
+			<result column="gallery_url" property="galleryUrl" jdbcType="VARCHAR" javaType="String"/>
+		</collection>
+	</resultMap>
+
+	<sql id="gallery_select_all">
+		id,
+		pic_num,
+		gallery_date,
+		gallery
+		.
+		gallery_url,
+		pic_id,
+		pic_url,
+		pic_date,
+		pic_info
+		.
+		gallery_url
+	</sql>
+
+	<sql id="gallery_all">
+		id,
+		pic_num,
+		gallery_date,
+		gallery_url
+	</sql>
+
+	<insert id="insertByList" parameterType="list">
+		insert ignore into gallery
+		(
+		<include refid="gallery_all"/>
+		)
+		values
+		<foreach collection="list" item="item" separator=",">
+			(
+			#{item.id},
+			#{item.picNum},
+			#{item.galleryDate},
+			#{item.galleryUrl}
+			)
+		</foreach>
+	</insert>
+
+	<select id="selectByPosition" parameterType="int" resultMap="galleryList">
+		select
+		<include refid="gallery_all"/>
+		from gallery
+		limit #{position}, 1
+	</select>
+
+	<select id="selectByDate" parameterType="java.time.LocalDate" resultMap="galleryList">
+		select
+		<include refid="gallery_all"/>
+		from gallery
+		where gallery_date = #{date}
+	</select>
+
+
+</mapper>

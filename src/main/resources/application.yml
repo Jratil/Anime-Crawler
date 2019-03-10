@@ -1,0 +1,22 @@
+spring:
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+  datasource:
+    password: ratil123
+    username: root
+    url: jdbc:mysql://localhost:3306/anime_crawler?useSSL=false&serverTimezone=CTT&character=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 8080
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+logging:
+  level:
+    root: warn
+    org.springframwork.boot: info
+    top.ratil.animecrawler.task: info
+  path: /www/wwwroor/animecrawler/log

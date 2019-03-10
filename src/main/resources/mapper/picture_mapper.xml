@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.4.6//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.ratil.animecrawler.mapper.PictureMapper">
+
+	<resultMap id="picture_map" type="top.ratil.animecrawler.entity.Picture">
+		<constructor>
+			<idArg column="pic_id" javaType="Integer" jdbcType="INTEGER"/>
+			<arg column="pic_url" javaType="String" jdbcType="VARCHAR"/>
+			<arg column="pic_date" javaType="java.time.LocalDate" jdbcType="DATE"/>
+			<arg column="gallery_url" javaType="String" jdbcType="VARCHAR"/>
+		</constructor>
+	</resultMap>
+
+	<sql id="select_picture_all">
+		pic_id,
+		pic_url,
+		pic_date,
+		gallery_url
+	</sql>
+
+	<insert id="insertByPicture" parameterType="top.ratil.animecrawler.entity.Picture">
+		insert ignore into pic_info
+		(
+		<include refid="select_picture_all"/>
+		)
+		values
+		(#{picId}, #{picUrl}, #{picDate}, #{galleryUrl})
+	</insert>
+
+	<select id="selectById" parameterType="int" resultMap="picture_map">
+		select
+		<include refid="select_picture_all"/>
+		from pic_info
+		where pic_id = #{picId}
+	</select>
+
+	<select id="selectByDate" parameterType="java.time.LocalDate" resultType="top.ratil.animecrawler.entity.Picture">
+		select
+		<include refid="select_picture_all"/>
+		from pic_info
+		where pic_id = #{picId}
+
+	</select>
+
+	<select id="selectByGallery" parameterType="String" resultMap="picture_map">
+		select
+		<include refid="select_picture_all"/>
+		from pic_info
+		where gallery_url = #{galleryUrl}
+	</select>
+
+
+</mapper>
