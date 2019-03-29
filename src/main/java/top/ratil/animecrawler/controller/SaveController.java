@@ -20,7 +20,7 @@ public class SaveController {
     public Object addGallery(@PathVariable("verify") String verify,
                              @PathVariable(value = "date", required = false) String date) {
 
-        if (ConstantInfo.VERIFY.equals(verify)) {
+        if (!ConstantInfo.VERIFY.equals(verify)) {
             return ResultRest.fail("验证出错!");
         }
 
