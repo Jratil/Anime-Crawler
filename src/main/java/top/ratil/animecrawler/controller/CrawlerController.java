@@ -73,7 +73,7 @@ public class CrawlerController {
             galleryNum = "1";
         }
 
-        picMap = picUrlService.findFromSql(Integer.parseInt(pageNum) * Integer.parseInt(galleryNum));
+        picMap = picUrlService.findFromSql((Integer.parseInt(pageNum) - 1) * 20 + Integer.parseInt(galleryNum));
         if (picMap != null && picMap.get(ConstantInfo.PICTURE_LIST) != null) {
             return ResultRest.success(picMap);
         }
