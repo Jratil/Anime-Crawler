@@ -2,12 +2,14 @@ package top.ratil.animecrawler.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import top.ratil.animecrawler.annotation.RequestLimit;
 import top.ratil.animecrawler.api.Constant.ConstantInfo;
 import top.ratil.animecrawler.api.ResultRest;
 import top.ratil.animecrawler.entity.Gallery;
 import top.ratil.animecrawler.service.CrawlerService;
 import top.ratil.animecrawler.service.PicUrlService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ public class CrawlerController {
     @Autowired
     private PicUrlService picUrlService;
 
+    @RequestLimit(count = 5, time = 60*1000)
     @GetMapping("/api")
     public Object api() {
         String message = "<h2>使用方法:</h2>" +
@@ -31,8 +34,9 @@ public class CrawlerController {
         return message;
     }
 
+    @RequestLimit(count = 5, time = 60*1000)
     @GetMapping(value = {"/getPageUrl/{pageNum}", "/api/pageUrl/{pageNum}", "/api/pageUrl"})
-    public Object getPageUrl(@PathVariable(value = "pageNum", required = false) String pageNum) {
+    public Object getPageUrl(@PathVariable(value = "pageNum", required = false) String pageNum, HttpServletRequest request) {
         Map<String, Object> urlMap;
 
         if (pageNum == null) {
@@ -42,8 +46,10 @@ public class CrawlerController {
         return ResultRest.success(urlMap);
     }
 
+    @RequestLimit(count = 5, time = 60*1000)
     @GetMapping(value = {"/getPicUrl/{pageNum}", "/getPicUrl", "/api/picUrl/{pageNum}", "/api/picUrl"})
-    public Object getPicUrl(@PathVariable(value = "pageNum", required = false) String pageNum) throws Exception {
+    public Object getPicUrl(@PathVariable(value = "pageNum", required = false) String pageNum,
+                            HttpServletRequest request) throws Exception {
         Map<String, Object> urlMap;
 
         if (pageNum == null) {
@@ -53,9 +59,11 @@ public class CrawlerController {
         return ResultRest.success(urlMap);
     }
 
+    @RequestLimit(count = 5, time = 60)
     @GetMapping(value = {"/api/gallery/{pageNum}/{galleryNum}", "/api/gallery"})
     public Object getGalleryUrl(@PathVariable(value = "pageNum", required = false) String pageNum,
-                                @PathVariable(value = "galleryNum", required = false) String galleryNum) throws Exception {
+                                @PathVariable(value = "galleryNum", required = false) String galleryNum,
+                                HttpServletRequest request) throws Exception {
         Map<String, Object> picMap;
 
         if (pageNum == null) {

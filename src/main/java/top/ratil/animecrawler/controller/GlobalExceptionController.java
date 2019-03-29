@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import top.ratil.animecrawler.api.ResultRest;
 import top.ratil.animecrawler.api.Constant.StaticInfo;
 import top.ratil.animecrawler.exception.PageException;
+import top.ratil.animecrawler.exception.RequestLimitException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,9 +24,14 @@ public class GlobalExceptionController implements ErrorController {
         return ResultRest.fail(StaticInfo.PAGE_STATUS, e.getMessage());
     }
 
+    @ExceptionHandler(RequestLimitException.class)
+    public Object requestLimitException(RequestLimitException e) {
+        return ResultRest.fail(StaticInfo.PAGE_STATUS, e.geMessage());
+    }
+
     @ExceptionHandler(IndexOutOfBoundsException.class)
     public Object indexException(IndexOutOfBoundsException e) {
-        return ResultRest.fail(404, "访问参数不存在");
+        return ResultRest.fail(StaticInfo.PAGE_STATUS, "访问参数不存在");
     }
 
     /**
