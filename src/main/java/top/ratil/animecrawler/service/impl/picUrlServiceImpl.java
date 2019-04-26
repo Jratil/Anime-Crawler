@@ -12,6 +12,7 @@ import top.ratil.animecrawler.entity.Picture;
 import top.ratil.animecrawler.mapper.GalleryMapper;
 import top.ratil.animecrawler.mapper.PictureMapper;
 import top.ratil.animecrawler.service.PicUrlService;
+import top.ratil.animecrawler.util.RedisUtils;
 import us.codecraft.webmagic.Spider;
 
 import java.time.LocalDate;
@@ -24,18 +25,28 @@ public class picUrlServiceImpl implements PicUrlService {
     private GalleryMapper galleryMapper;
     @Autowired
     private PictureMapper pictureMapper;
+    @Autowired
+    private RedisUtils redisUtils;
 
     public Map<String, Object> findFromSql(int position) {
 
         List<Picture> pictureList;
 
-        Gallery gallery = galleryMapper.selectByPosition(position - 1);
-        System.out.println(gallery);
+        Gallery gallery = (Gallery) redisUtils.get(String.valueOf(position - 1));
         if (gallery == null) {
-            return null;
+            gallery = galleryMapper.selectByPosition(position - 1);
+            if (gallery == null) {
+                return null;
+            }
+            redisUtils.set(String.valueOf(position - 1), gallery);
         }
 
-        pictureList = pictureMapper.selectByGallery(gallery.getGalleryUrl());
+
+        pictureList = (List<Picture>) redisUtils.get(gallery.getGalleryUrl());
+        if (pictureList == null || pictureList.size() == 0) {
+            pictureList = pictureMapper.selectByGallery(gallery.getGalleryUrl());
+            redisUtils.set(gallery.getGalleryUrl(), pictureList);
+        }
 
         Map<String, Object> map = new HashMap<>();
         map.put(ConstantInfo.PICTURE_NUM, pictureList.size());

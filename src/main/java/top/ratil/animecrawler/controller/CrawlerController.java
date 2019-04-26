@@ -5,12 +5,9 @@ import org.springframework.web.bind.annotation.*;
 import top.ratil.animecrawler.annotation.RequestLimit;
 import top.ratil.animecrawler.api.Constant.ConstantInfo;
 import top.ratil.animecrawler.api.ResultRest;
-import top.ratil.animecrawler.entity.Gallery;
 import top.ratil.animecrawler.service.CrawlerService;
 import top.ratil.animecrawler.service.PicUrlService;
-
 import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
