@@ -1,6 +1,6 @@
 ## Anime Crawler  
 
-[Demo地址](http://pic.jratil.co)  
+[预览地址](http://pic.jratil.co)  
 [接口地址](http://120.79.172.32:8080/api)  
 
 > 简介： 此项目为爬虫项目，爬取某个网站上的图片。
